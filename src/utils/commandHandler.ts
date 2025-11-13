@@ -53,6 +53,10 @@ I'm a creative technologist who builds systems that think and interfaces that br
 • Generative Systems
 • Web Technologies
 • Human-Computer Interaction
+• Animations through Code
+• Robotics
+
+
 
 <span class="text-terminal-cyan">Philosophy:</span>
 "Code is poetry. Systems are living organisms."
