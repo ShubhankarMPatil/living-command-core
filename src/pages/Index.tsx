@@ -1,18 +1,12 @@
-import { useEffect } from 'react';
-import { AnimatePresence } from 'framer-motion';
-import { useTerminalStore } from '@/store/terminalStore';
-import { BootScreen } from '@/components/BootScreen';
-import { Terminal } from '@/components/Terminal';
-import { AICommentary } from '@/components/AICommentary';
-import { SystemLogs } from '@/components/SystemLogs';
+import { AnimatePresence } from "framer-motion";
+import { useTerminalStore } from "@/store/terminalStore";
+import { BootScreen } from "@/components/BootScreen";
+import { Terminal } from "@/components/Terminal";
+import { AICommentary } from "@/components/AICommentary";
+import { SystemLogs } from "@/components/SystemLogs";
 
 const Index = () => {
-  const { isBooting, mode, setAiCommentary } = useTerminalStore();
-
-  useEffect(() => {
-    // Set initial AI commentary
-    setAiCommentary('Observing your exploration...');
-  }, [setAiCommentary]);
+  const { isBooting } = useTerminalStore();
 
   return (
     <div className="relative min-h-screen bg-background text-foreground overflow-hidden">
@@ -23,11 +17,7 @@ const Index = () => {
 
       {/* Main content */}
       <AnimatePresence mode="wait">
-        {isBooting ? (
-          <BootScreen key="boot" />
-        ) : (
-          <Terminal key="terminal" />
-        )}
+        {isBooting ? <BootScreen key="boot" /> : <Terminal key="terminal" />}
       </AnimatePresence>
 
       {/* AI Commentary */}

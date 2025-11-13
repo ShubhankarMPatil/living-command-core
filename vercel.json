@@ -1,0 +1,9 @@
+{
+    "functions": {
+      "api/commentary.ts": {
+        "runtime": "edge",
+        "maxDuration": 5
+      }
+    }
+  }
+  

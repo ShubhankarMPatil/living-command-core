@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 export type CommandHistory = {
   command: string;
@@ -6,7 +6,7 @@ export type CommandHistory = {
   timestamp: Date;
 };
 
-export type TerminalMode = 'boot' | 'main' | 'ai-talk';
+export type TerminalMode = "boot" | "main" | "ai-talk";
 
 export type TerminalState = {
   mode: TerminalMode;
@@ -15,9 +15,13 @@ export type TerminalState = {
   isBooting: boolean;
   aiCommentary: string;
   showLogs: boolean;
-  status: 'online' | 'thinking' | 'idle';
+  status: "online" | "thinking" | "idle";
 
   hasShownCommands: boolean;
+
+  // New: commentary mode
+  commentaryMode: "static" | "dynamic";
+  setCommentaryMode: (m: "static" | "dynamic") => void;
 
   setMode: (mode: TerminalMode) => void;
   addToHistory: (command: string, output: string) => void;
@@ -26,22 +30,26 @@ export type TerminalState = {
   setIsBooting: (isBooting: boolean) => void;
   setAiCommentary: (commentary: string) => void;
   toggleLogs: () => void;
-  setStatus: (status: 'online' | 'thinking' | 'idle') => void;
+  setStatus: (status: "online" | "thinking" | "idle") => void;
   clearHistory: () => void;
 
   setHasShownCommands: (value: boolean) => void;
 };
 
-export const useTerminalStore = create<TerminalState>((set) => ({
-  mode: 'boot',
+export const useTerminalStore = create<TerminalState>((set, get) => ({
+  mode: "boot",
   history: [],
-  currentCommand: '',
+  currentCommand: "",
   isBooting: true,
-  aiCommentary: 'System initializing...',
+  aiCommentary: "System initializing...",
   showLogs: false,
-  status: 'idle',
+  status: "idle",
 
   hasShownCommands: false,
+
+  // commentary mode settings (static | dynamic)
+  commentaryMode: "static",
+  setCommentaryMode: (commentaryMode) => set({ commentaryMode }),
 
   setMode: (mode) => set({ mode }),
 
@@ -50,7 +58,6 @@ export const useTerminalStore = create<TerminalState>((set) => ({
       history: [...state.history, { command, output, timestamp: new Date() }],
     })),
 
-  // NEW — Allows live replacement of the last history entry (for animations)
   replaceLastHistory: (output) =>
     set((state) => {
       if (state.history.length === 0) return state;

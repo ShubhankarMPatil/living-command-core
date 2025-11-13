@@ -1,13 +1,11 @@
-import { projects } from '@/data/projects';
-import { useTerminalStore } from '@/store/terminalStore';
+import { projects } from "@/data/projects";
+import { useTerminalStore } from "@/store/terminalStore";
 
 export const handleCommand = (command: string): string => {
   const cmd = command.toLowerCase().trim();
   const store = useTerminalStore.getState();
 
-  // ───────────────────────────────────────────────
-  //  NUMERIC PROJECT ID HANDLER (UNLIMITED RANGE)
-  // ───────────────────────────────────────────────
+  // Numeric project handler
   const num = Number(cmd);
   if (!isNaN(num) && num >= 1 && num <= projects.length) {
     const p = projects[num - 1];
@@ -17,32 +15,29 @@ export const handleCommand = (command: string): string => {
 ${p.description}
 
 <span class="text-terminal-cyan">Technology Stack:</span>
-${p.techStack.map((t) => `  • ${t}`).join('\n')}
+${p.techStack.map((t) => `  • ${t}`).join("\n")}
 
 <span class="text-terminal-cyan">Status:</span> ${p.status.toUpperCase()}
-${p.link ? `<span class="text-terminal-cyan">Link:</span> ${p.link}` : ''}
+${p.link ? `<span class="text-terminal-cyan">Link:</span> ${p.link}` : ""}
     `.trim();
   }
 
-  // ───────────────────────────────────────────────
-  //  COMMAND SWITCH
-  // ───────────────────────────────────────────────
   switch (cmd) {
-    case 'help':
+    case "help":
       return `
 <span class="text-terminal-green text-glow">Available Commands:</span>
 
 <span class="text-terminal-cyan">about</span>       - About Shubhankar
 <span class="text-terminal-cyan">projects</span>    - Show project list
 <span class="text-terminal-cyan">resume</span>      - Download resume
-<span class="text-terminal-cyan">ai-talk</span>     - AI commentary mode
+<span class="text-terminal-cyan">ai-talk</span>     - AI commentary mode (on/off/status)
 <span class="text-terminal-cyan">logs</span>        - Toggle system logs
 <span class="text-terminal-cyan">clear</span>       - Clear terminal
 <span class="text-terminal-cyan">status</span>      - System status
 <span class="text-terminal-cyan">help</span>        - Show this help
       `.trim();
 
-    case 'about':
+    case "about":
       return `
 <span class="text-terminal-green text-glow">About Shubhankar</span>
 
@@ -56,13 +51,11 @@ I'm a creative technologist who builds systems that think and interfaces that br
 • Animations through Code
 • Robotics
 
-
-
 <span class="text-terminal-cyan">Philosophy:</span>
 "Code is poetry. Systems are living organisms."
       `.trim();
 
-    case 'projects':
+    case "projects":
       return `
 <span class="text-terminal-green text-glow">Project Portfolio</span>
 
@@ -72,21 +65,17 @@ ${projects
 <span class="text-terminal-cyan">[${i + 1}]</span> <span class="text-terminal-green">${p.title}</span>
 ${p.description}
 <span class="text-terminal-yellow">Status:</span> ${p.status}
-<span class="text-terminal-yellow">Stack:</span> ${p.techStack.join(', ')}
+<span class="text-terminal-yellow">Stack:</span> ${p.techStack.join(", ")}
 `
   )
-  .join('\n')}
+  .join("\n")}
 
 <span class="text-muted-foreground">Type project ID (1-${projects.length}) to view details</span>
       `.trim();
 
-    // ───────────────────────────────────────────────
-    // RESUME COMMAND — REAL ANIMATED PROGRESS BAR
-    // ───────────────────────────────────────────────
     case "resume": {
       const storeState = useTerminalStore.getState();
-    
-      // Progress frames
+
       const frames = [
         { bar: "▱▱▱▱▱▱▱▱▱▱", pct: "0%" },
         { bar: "▰▱▱▱▱▱▱▱▱▱", pct: "10%" },
@@ -100,25 +89,22 @@ ${p.description}
         { bar: "▰▰▰▰▰▰▰▰▰▱", pct: "90%" },
         { bar: "▰▰▰▰▰▰▰▰▰▰", pct: "100%" },
       ];
-    
+
       const initial = `
-    <span class="text-terminal-green text-glow">Generating resume.pdf...</span>
-    <span class="text-terminal-cyan">${frames[0].bar} ${frames[0].pct}</span>
+<span class="text-terminal-green text-glow">Generating resume.pdf...</span>
+<span class="text-terminal-cyan">${frames[0].bar} ${frames[0].pct}</span>
       `.trim();
-    
-      // Return initial output so CommandInput adds *one* history entry
+
       setTimeout(() => {
-        // Animate frames
         frames.forEach((frame, i) => {
           setTimeout(() => {
             storeState.replaceLastHistory(`
-    <span class="text-terminal-green text-glow">Generating resume.pdf...</span>
-    <span class="text-terminal-cyan">${frame.bar} ${frame.pct}</span>
+<span class="text-terminal-green text-glow">Generating resume.pdf...</span>
+<span class="text-terminal-cyan">${frame.bar} ${frame.pct}</span>
             `.trim());
           }, i * 150);
         });
-    
-        // Final completion + download
+
         setTimeout(() => {
           try {
             const a = document.createElement("a");
@@ -127,7 +113,7 @@ ${p.description}
             document.body.appendChild(a);
             a.click();
             a.remove();
-    
+
             storeState.replaceLastHistory(
               `<span class="text-terminal-green">✓ Resume downloaded successfully</span>`
             );
@@ -138,37 +124,59 @@ ${p.description}
           }
         }, frames.length * 150 + 30);
       }, 10);
-    
+
       return initial;
     }
-    
-    // ───────────────────────────────────────────────
 
-    case 'ai-talk':
-      store.setMode('ai-talk');
-      store.setStatus('thinking');
+    // AI commentary controls
+    case "ai-talk":
+    case "ai-talk on": {
+      store.setMode("ai-talk");
+      store.setCommentaryMode("dynamic");
+      store.setStatus("thinking");
       return `
-<span class="text-terminal-green text-glow">Entering AI Commentary Mode...</span>
-<span class="text-muted-foreground">Type 'exit' to return</span>
+<span class="text-terminal-green text-glow">AI Commentary Enabled</span>
+<span class="text-muted-foreground">Generating live reflections (toggle with 'ai-talk off')</span>
       `.trim();
+    }
 
-    case 'exit':
-      if (store.mode === 'ai-talk') {
-        store.setMode('main');
-        store.setStatus('online');
+    case "ai-talk off": {
+      store.setMode("main");
+      store.setCommentaryMode("static");
+      store.setStatus("online");
+      return `<span class="text-terminal-green">AI Commentary disabled (static mode active)</span>`;
+    }
+
+    case "ai-talk status": {
+      return `
+<span class="text-terminal-green text-glow">AI Commentary Status</span>
+
+Mode: ${store.mode}
+Commentary: ${store.commentaryMode}
+Status: ${store.status}
+      `.trim();
+    }
+
+    case "exit":
+      if (store.mode === "ai-talk") {
+        store.setMode("main");
+        store.setStatus("online");
         return `<span class="text-terminal-green">Exited AI Commentary Mode</span>`;
       }
       return `<span class="text-terminal-red">Nothing to exit</span>`;
 
-    case 'logs':
+    case "logs": {
+      const before = store.showLogs;
       store.toggleLogs();
-      return `<span class="text-terminal-green">System logs ${store.showLogs ? 'enabled' : 'disabled'}</span>`;
+      const after = !before;
+      return `<span class="text-terminal-green">System logs ${after ? "enabled" : "disabled"}</span>`;
+    }
 
-    case 'clear':
+    case "clear":
       store.clearHistory();
-      return '';
+      return "";
 
-    case 'status':
+    case "status":
       return `
 <span class="text-terminal-green text-glow">System Status</span>
 
