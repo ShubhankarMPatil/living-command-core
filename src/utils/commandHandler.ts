@@ -130,32 +130,25 @@ ${p.description}
 
     // AI commentary controls
     case "ai-talk":
-    case "ai-talk on": {
-      store.setMode("ai-talk");
-      store.setCommentaryMode("dynamic");
-      store.setStatus("thinking");
-      return `
-<span class="text-terminal-green text-glow">AI Commentary Enabled</span>
-<span class="text-muted-foreground">Generating live reflections (toggle with 'ai-talk off')</span>
-      `.trim();
-    }
-
-    case "ai-talk off": {
-      store.setMode("main");
-      store.setCommentaryMode("static");
-      store.setStatus("online");
-      return `<span class="text-terminal-green">AI Commentary disabled (static mode active)</span>`;
-    }
-
-    case "ai-talk status": {
-      return `
-<span class="text-terminal-green text-glow">AI Commentary Status</span>
-
-Mode: ${store.mode}
-Commentary: ${store.commentaryMode}
-Status: ${store.status}
-      `.trim();
-    }
+      case "ai-talk on":
+        store.setMode("ai-talk");
+        store.setStatus("thinking");
+        return `
+      <span class="text-terminal-green text-glow">AI Talk Mode Enabled</span>
+      <span class="text-muted-foreground">Reflective commentary engaged.</span>
+        `.trim();
+      
+      case "ai-talk off":
+        store.setMode("main");
+        store.setStatus("online");
+        return `<span class="text-terminal-green">AI Talk Mode Disabled</span>`;
+      
+      case "ai-talk status":
+        return `
+      <span class="text-terminal-green text-glow">AI Talk Status</span>
+      Mode: ${store.mode}
+        `.trim();
+      
 
     case "exit":
       if (store.mode === "ai-talk") {
