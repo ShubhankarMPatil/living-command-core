@@ -6,11 +6,37 @@ import { handleCommand } from '@/utils/commandHandler';
 export const CommandInput = () => {
   const [input, setInput] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
-  const { addToHistory, setStatus } = useTerminalStore();
 
+  const {
+    addToHistory,
+    setStatus,
+    hasShownCommands,
+    setHasShownCommands,
+    mode,
+  } = useTerminalStore();
+
+  // Focus on mount
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
+
+  // Show commands immediately upon entering main terminal (only once)
+  useEffect(() => {
+    if (mode === 'main' && !hasShownCommands) {
+      const commandList = [
+        'Available Commands:',
+        '  • about',
+        '  • projects',
+        '  • resume',
+        '  • ai-talk',
+        '  • clear',
+        '  • help',
+      ].join('\n');
+
+      addToHistory('', commandList);
+      setHasShownCommands(true);
+    }
+  }, [mode, hasShownCommands, addToHistory, setHasShownCommands]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,7 +46,7 @@ export const CommandInput = () => {
     const output = handleCommand(input.trim());
     addToHistory(input, output);
     setInput('');
-    
+
     setTimeout(() => {
       setStatus('online');
     }, 500);
@@ -29,16 +55,18 @@ export const CommandInput = () => {
   return (
     <form onSubmit={handleSubmit} className="flex items-center gap-2 mt-4">
       <span className="text-terminal-green text-glow">{'>'}</span>
+
       <input
         ref={inputRef}
         type="text"
         value={input}
         onChange={(e) => setInput(e.target.value)}
         className="flex-1 bg-transparent border-none outline-none text-foreground font-mono placeholder:text-muted-foreground"
-        placeholder="Type 'help' for available commands..."
+        placeholder="Type a command..."
         autoComplete="off"
         spellCheck="false"
       />
+
       <motion.span
         animate={{ opacity: [1, 0] }}
         transition={{ duration: 0.8, repeat: Infinity }}
