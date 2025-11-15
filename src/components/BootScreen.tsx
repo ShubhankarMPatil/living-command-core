@@ -21,6 +21,12 @@ export const BootScreen = () => {
 
   const { setIsBooting, setMode } = useTerminalStore();
 
+  const exitBoot = () => {
+    setIsBooting(false);
+    setMode('main');
+  };
+
+  // Boot message animation
   useEffect(() => {
     if (finished) return;
 
@@ -35,20 +41,38 @@ export const BootScreen = () => {
     }
   }, [currentLine, finished]);
 
-  // ENTER → exit boot screen manually
+  // ENTER for Desktop
   useEffect(() => {
     if (!finished) return;
 
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Enter') {
-        setIsBooting(false);
-        setMode('main');     // enter terminal
-      }
+      if (e.key === 'Enter') exitBoot();
     };
 
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [finished, setIsBooting, setMode]);
+  }, [finished]);
+
+  // TAP for Mobile
+  useEffect(() => {
+    if (!finished) return;
+
+    const handleTap = () => exitBoot();
+
+    // touchstart works on:
+    //  - iOS Safari
+    //  - Android Chrome
+    //  - mobile browsers that suppress click delays
+    window.addEventListener('touchstart', handleTap, { passive: true });
+
+    // fallback for mobile browsers with delayed click
+    window.addEventListener('click', handleTap, { passive: true });
+
+    return () => {
+      window.removeEventListener('touchstart', handleTap);
+      window.removeEventListener('click', handleTap);
+    };
+  }, [finished]);
 
   return (
     <motion.div
@@ -89,14 +113,14 @@ export const BootScreen = () => {
         />
       )}
 
-      {/* show ENTER prompt after boot is done */}
+      {/* show ENTER/TAP prompt after boot is done */}
       {finished && (
         <motion.div
           animate={{ opacity: [1, 0.3, 1] }}
           transition={{ repeat: Infinity, duration: 1.5 }}
           className="mt-6 text-terminal-green text-sm font-mono"
         >
-          Press Enter to continue...
+          Press Enter or Tap to continue...
         </motion.div>
       )}
     </motion.div>
