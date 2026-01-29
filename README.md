@@ -1,73 +1,109 @@
-# Welcome to your Lovable project
+# Living Command Core
 
-## Project info
+**Living Command Core** is a modern, interactive web application built with React and TypeScript, focused on clean UI composition, scalable frontend architecture, and fast development workflows. The project showcases practical usage of contemporary frontend tooling with an emphasis on maintainability, developer experience, and design consistency.
 
-**URL**: https://lovable.dev/projects/f84d4d44-66cd-40c8-a836-11c7f9fce96d
+## Live Demo
 
-## How can I edit this code?
+If deployed, add the URL here.
+(If not yet deployed, remove this section or add deployment notes.)
 
-There are several ways of editing your application.
+---
 
-**Use Lovable**
+## Tech Stack
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/f84d4d44-66cd-40c8-a836-11c7f9fce96d) and start prompting.
+* **Vite** – fast build tooling and development server
+* **React** – component-based UI development
+* **TypeScript** – type safety and improved maintainability
+* **Tailwind CSS** – utility-first styling
+* **shadcn/ui** – accessible, reusable UI components
 
-Changes made via Lovable will be committed automatically to this repo.
+This stack prioritizes performance, composability, and long-term scalability over framework novelty.
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Project Structure
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+```
+living-command-core/
+├── src/
+│   ├── components/     # Reusable UI components
+│   ├── pages/          # Page-level components
+│   ├── hooks/          # Custom React hooks
+│   ├── lib/            # Utilities and shared logic
+│   └── main.tsx        # Application entry point
+├── public/
+├── index.html
+├── tailwind.config.ts
+├── vite.config.ts
+└── package.json
+```
 
-Follow these steps:
+The structure is intentionally opinionated but familiar, making it easy for new contributors to onboard quickly.
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+* Node.js (recommended via nvm)
+* npm or compatible package manager
+
+### Installation
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+git clone https://github.com/ShubhankarMPatil/living-command-core.git
+cd living-command-core
+npm install
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Development Server
 
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```sh
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The app will be available locally with hot module replacement enabled.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Production Build
 
-**Use GitHub Codespaces**
+```sh
+npm run build
+npm run preview
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+---
 
-## What technologies are used for this project?
+## Design & Engineering Notes
 
-This project is built with:
+* **Component-first architecture** to reduce coupling and encourage reuse
+* **Type-driven development** using TypeScript instead of runtime checks
+* **Utility-first styling** to avoid bloated CSS abstractions
+* **Accessible UI primitives** via shadcn/ui rather than custom reinvented components
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+This project favors explicitness and clarity over abstraction-heavy patterns that tend to slow iteration.
 
-## How can I deploy this project?
+---
 
-Simply open [Lovable](https://lovable.dev/projects/f84d4d44-66cd-40c8-a836-11c7f9fce96d) and click on Share -> Publish.
+## Potential Extensions
 
-## Can I connect a custom domain to my Lovable project?
+* State management layer (Zustand or Redux Toolkit) if complexity increases
+* Backend/API integration
+* Authentication and role-based access
+* Testing setup (Vitest + Testing Library)
+* CI pipeline for linting and builds
 
-Yes, you can!
+These were intentionally excluded to keep the core focused and readable.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+---
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## Author
+
+**Shubhankar M Patil**
+GitHub: [https://github.com/ShubhankarMPatil](https://github.com/ShubhankarMPatil)
+
+---
+
+## License
+
+MIT License
