@@ -4,8 +4,7 @@
 
 ## Live Demo
 
-If deployed, add the URL here.
-(If not yet deployed, remove this section or add deployment notes.)
+https://living-command-core.vercel.app/
 
 ---
 
